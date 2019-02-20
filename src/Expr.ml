@@ -50,5 +50,25 @@ let _ =
    Takes a state and an expression, and returns the value of the expression in 
    the given state.
 *)
-let eval = failwith "Not implemented yet"
+let bool_to_int x = if x then 1 else 0
+
+let rec eval state expr = 
+  match expr with
+  | Const v -> v
+  | Var v -> state v
+  | Binop (op, x, y) -> 
+    match op with
+    | "+" -> (eval state x) + (eval state y)
+    | "-" -> (eval state x) - (eval state y)
+    | "*" -> (eval state x) * (eval state y)
+    | "/" -> (eval state x) / (eval state y)
+    | "%" -> (eval state x) mod (eval state y)
+    | "&&" -> bool_to_int (((eval state x) <> 0) && ((eval state y) <> 0))
+    | "!!" -> bool_to_int (((eval state x) <> 0) || ((eval state y) <> 0))
+    | "==" -> bool_to_int ((eval state x) = (eval state y))
+    | "!=" -> bool_to_int ((eval state x) <> (eval state y))
+    | "<=" -> bool_to_int ((eval state x) <= (eval state y))
+    | "<" -> bool_to_int ((eval state x) < (eval state y))
+    | ">=" -> bool_to_int ((eval state x) >= (eval state y))
+    | ">" -> bool_to_int ((eval state x) > (eval state y))
                     
