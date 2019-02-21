@@ -35,13 +35,14 @@ let update x v s = fun y -> if x = y then v else s y
 (* An example of a non-trivial state: *)                                                   
 let s = update "x" 1 @@ update "y" 2 @@ update "z" 3 @@ update "t" 4 empty
 
-(* Some testing; comment this definition out when submitting the solution. *)
+(* Some testing; comment this definition out when submitting the solution.
 let _ =
   List.iter
     (fun x ->
        try  Printf.printf "%s=%d\n" x @@ s x
        with Failure s -> Printf.printf "%s\n" s
     ) ["x"; "a"; "y"; "z"; "t"; "b"]
+*)
 
 (* Expression evaluator
 
@@ -54,7 +55,7 @@ let bool_to_int x = if x then 1 else 0
 
 let rec eval state expr = 
   match expr with
-  | Const v -> v
+  | Const c -> c
   | Var v -> state v
   | Binop (op, x, y) -> 
     match op with
@@ -63,12 +64,13 @@ let rec eval state expr =
     | "*" -> (eval state x) * (eval state y)
     | "/" -> (eval state x) / (eval state y)
     | "%" -> (eval state x) mod (eval state y)
-    | "&&" -> bool_to_int (((eval state x) <> 0) && ((eval state y) <> 0))
-    | "!!" -> bool_to_int (((eval state x) <> 0) || ((eval state y) <> 0))
-    | "==" -> bool_to_int ((eval state x) = (eval state y))
-    | "!=" -> bool_to_int ((eval state x) <> (eval state y))
+    | "&&" -> bool_to_int ( ( (eval state x) <> 0 ) && ( (eval state y) <> 0 ) )
+    | "!!" -> bool_to_int ( ( (eval state x) <> 0 ) || ( (eval state y) <> 0 ) )
+    | "==" -> bool_to_int ((eval state x) == (eval state y))
+    | "!=" -> bool_to_int ((eval state x) != (eval state y))
     | "<=" -> bool_to_int ((eval state x) <= (eval state y))
     | "<" -> bool_to_int ((eval state x) < (eval state y))
     | ">=" -> bool_to_int ((eval state x) >= (eval state y))
     | ">" -> bool_to_int ((eval state x) > (eval state y))
+    | _ -> failwith "Not implemented yet"
                     
